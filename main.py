@@ -6,13 +6,18 @@ from opensky_api import OpenSkyApi
 from utils import create_csv_row
 
 MINUTES_RESULTION = 5
+REQUESTS_INTERVAL = 10
 
 
 def retrieve_data():
     api = OpenSkyApi()
-    s = api.get_states()
+    try:
+        response = api.get_states()
+    except Exception as e:
+        print(e)
+        return
     with open(create_output_file_name(), 'a') as file:
-        for row in [create_csv_row(state, s.time) for state in s.states]:
+        for row in [create_csv_row(state, response.time) for state in response.states]:
             file.write(row)
 
 
@@ -26,7 +31,7 @@ def create_output_file_name():
 
 
 def main():
-    schedule.every(20).seconds.do(retrieve_data)
+    schedule.every(REQUESTS_INTERVAL).seconds.do(retrieve_data)
     while True:
         schedule.run_pending()
 
