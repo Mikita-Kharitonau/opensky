@@ -1,4 +1,4 @@
-CSV_ROW = "{}, " * 16 + "{}\n"
+CSV_ROW = "{}," * 17 + "{}\n"
 
 
 def create_csv_row(state_vector, time):
