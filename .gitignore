@@ -1,2 +1,4 @@
 .idea
 __pycache__/
+spark-queries/project/
+spark-queries/target/
