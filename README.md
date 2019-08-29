@@ -410,71 +410,71 @@ df.groupBy("origin_country").agg(round(avg("geo_altitude"), 3)).withColumnRename
 only showing top 20 rows
 ```
 
-# UPDATE 28.08
+# UPDATE 29.08, 11:40
 ```
 nikitakharitonov@msq-wsl-2477:~/Projects/opensky/spark-queries$ spark-submit --class SparkQueries target/scala-2.11/spark-queries_2.11-0.1.jar 
-19/08/28 17:57:47 WARN Utils: Your hostname, msq-wsl-2477 resolves to a loopback address: 127.0.1.1; using 172.20.1.13 instead (on interface enp2s0)
-19/08/28 17:57:47 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
-19/08/28 17:57:47 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-19/08/28 17:57:48 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+19/08/29 11:37:51 WARN Utils: Your hostname, msq-wsl-2477 resolves to a loopback address: 127.0.1.1; using 172.20.1.13 instead (on interface enp2s0)
+19/08/29 11:37:51 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+19/08/29 11:37:51 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+19/08/29 11:37:52 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
 
 a. Get number of partitions for 1-hour dataset
 val rdd = spark.sparkContext.textFile("file:///home/nikitakharitonov/Projects/opensky/opensky-data-2019-08-28/14/*")
 Num partitions: 12
 
 b. Calculate average latitude and minimum longitude for each origin _country
-rowDf.count = 4743084
+rowDf.count = 2300193
 df.groupBy("origin_country").agg(avg("latitude")).show(1000, false)
-+--------------------+-------------------+
-|      origin_country|      avg(latitude)|
-+--------------------+-------------------+
-|       Côte d'Ivoire| 13.805873170731708|
-|               Yemen| 52.938904878048774|
-|Islamic Republic ...| 39.002896480177846|
-|             Senegal|  14.16415706806283|
-|              Sweden| 56.395177522365834|
-|   Republic of Korea|   36.1616769340449|
-|         Philippines| 18.266388487095227|
-|           Singapore| 18.715821694172757|
-|            Malaysia|  6.598564296601562|
-|Kingdom of the Ne...|  49.44724606977238|
-|                Fiji|-36.356388031914896|
-|              Turkey|  44.36830075362936|
-|                Iraq| 42.902485116731505|
-|             Germany|  48.68426226502666|
-|         Afghanistan| 36.121953877551015|
-|            Cambodia|  19.12236588235294|
-|              Jordan|  42.51256707040123|
-|              Rwanda| -11.59701992619926|
-|            Maldives| 12.246186547085202|
-|              France|  46.47379030488618|
-+--------------------+-------------------+
++--------------------+------------------+
+|      origin_country|     avg(latitude)|
++--------------------+------------------+
+|Islamic Republic ...|36.022169514237845|
+|             Senegal|14.022715202702708|
+|              Sweden| 55.04221752594165|
+|   Republic of Korea| 35.43498432749954|
+|         Philippines| 17.23016420194792|
+|           Singapore|19.270153462081954|
+|            Malaysia| 5.049126709144135|
+|Kingdom of the Ne...|49.023073317469695|
+|              Turkey|  43.5553916164006|
+|                Iraq| 32.94802875507444|
+|             Germany| 47.80693018639956|
+|            Cambodia|20.799500350877203|
+|         Afghanistan|30.435676923076908|
+|              Jordan|34.905783107088986|
+|              Rwanda|        19.7214235|
+|              France|44.518890566424965|
+|              Greece|42.947930428935464|
+|           Sri Lanka|3.1328260047281336|
+|              Taiwan|25.733121950608044|
+|             Algeria| 39.77839724821132|
++--------------------+------------------+
 only showing top 20 rows
 
-spark.sql("select origin_country, avg(latitude) from my_df_table group by origin_country").show
+spark.sql("select origin_country, avg(latitude) from opensky_data group by origin_country").show
 +--------------------+-----------------------------+
 |      origin_country|avg(CAST(latitude AS DOUBLE))|
 +--------------------+-----------------------------+
-|       Côte d'Ivoire|           13.805873170731708|
-|               Yemen|           52.938904878048774|
-|Islamic Republic ...|           39.002896480177846|
-|             Senegal|            14.16415706806283|
-|              Sweden|           56.395177522365834|
-|   Republic of Korea|             36.1616769340449|
-|         Philippines|           18.266388487095227|
-|           Singapore|           18.715821694172757|
-|            Malaysia|            6.598564296601562|
-|Kingdom of the Ne...|            49.44724606977238|
-|                Fiji|          -36.356388031914896|
-|              Turkey|            44.36830075362936|
-|                Iraq|           42.902485116731505|
-|             Germany|            48.68426226502666|
-|         Afghanistan|           36.121953877551015|
-|            Cambodia|            19.12236588235294|
-|              Jordan|            42.51256707040123|
-|              Rwanda|           -11.59701992619926|
-|            Maldives|           12.246186547085202|
-|              France|            46.47379030488618|
+|Islamic Republic ...|           36.022169514237845|
+|             Senegal|           14.022715202702708|
+|              Sweden|            55.04221752594165|
+|   Republic of Korea|            35.43498432749954|
+|         Philippines|            17.23016420194792|
+|           Singapore|           19.270153462081954|
+|            Malaysia|            5.049126709144135|
+|Kingdom of the Ne...|           49.023073317469695|
+|              Turkey|             43.5553916164006|
+|                Iraq|            32.94802875507444|
+|             Germany|            47.80693018639956|
+|            Cambodia|           20.799500350877203|
+|         Afghanistan|           30.435676923076908|
+|              Jordan|           34.905783107088986|
+|              Rwanda|                   19.7214235|
+|              France|           44.518890566424965|
+|              Greece|           42.947930428935464|
+|           Sri Lanka|           3.1328260047281336|
+|              Taiwan|           25.733121950608044|
+|             Algeria|            39.77839724821132|
 +--------------------+-----------------------------+
 only showing top 20 rows
 
@@ -482,71 +482,71 @@ df.groupBy("origin_country").agg(min("longitude")).show(1000, false)
 +--------------------+--------------+
 |      origin_country|min(longitude)|
 +--------------------+--------------+
-|       Côte d'Ivoire|      -13.6624|
-|               Yemen|        5.6381|
-|Islamic Republic ...|        10.007|
-|             Senegal|      -13.1374|
-|              Sweden|       -0.0093|
-|   Republic of Korea|     -100.0158|
-|         Philippines|       100.005|
-|            Malaysia|        1.2917|
-|           Singapore|       -0.0071|
-|                Fiji|       144.634|
-|Kingdom of the Ne...|       -0.0006|
-|              Turkey|       -0.0041|
-|                Iraq|       10.0349|
-|             Germany|       -0.0004|
-|         Afghanistan|       13.1547|
-|            Cambodia|      100.7385|
-|              Jordan|       -0.0063|
-|            Maldives|       77.0701|
-|              Rwanda|       18.5851|
-|              France|       -0.0006|
+|Islamic Republic ...|        2.2717|
+|             Senegal|      -16.4313|
+|              Sweden|       -0.0029|
+|   Republic of Korea|     -115.9147|
+|         Philippines|      -118.502|
+|            Malaysia|      100.0029|
+|           Singapore|       -0.0275|
+|Kingdom of the Ne...|       -0.0001|
+|              Turkey|       -0.0039|
+|                Iraq|       28.7299|
+|             Germany|       -0.0001|
+|         Afghanistan|       45.3489|
+|            Cambodia|       105.054|
+|              Jordan|        -0.029|
+|              Rwanda|       72.6946|
+|              France|        -0.001|
+|              Greece|       -0.0228|
+|           Sri Lanka|      100.0121|
+|              Taiwan|     -101.6506|
+|             Algeria|        -0.002|
 +--------------------+--------------+
 only showing top 20 rows
 
-spark.sql("select origin_country, min(longitude) from my_df_table group by origin_country").show
+spark.sql("select origin_country, min(longitude) from opensky_data group by origin_country").show
 +--------------------+--------------+
 |      origin_country|min(longitude)|
 +--------------------+--------------+
-|       Côte d'Ivoire|      -13.6624|
-|               Yemen|        5.6381|
-|Islamic Republic ...|        10.007|
-|             Senegal|      -13.1374|
-|              Sweden|       -0.0093|
-|   Republic of Korea|     -100.0158|
-|         Philippines|       100.005|
-|            Malaysia|        1.2917|
-|           Singapore|       -0.0071|
-|                Fiji|       144.634|
-|Kingdom of the Ne...|       -0.0006|
-|              Turkey|       -0.0041|
-|                Iraq|       10.0349|
-|             Germany|       -0.0004|
-|         Afghanistan|       13.1547|
-|            Cambodia|      100.7385|
-|              Jordan|       -0.0063|
-|            Maldives|       77.0701|
-|              Rwanda|       18.5851|
-|              France|       -0.0006|
+|Islamic Republic ...|        2.2717|
+|             Senegal|      -16.4313|
+|              Sweden|       -0.0029|
+|   Republic of Korea|     -115.9147|
+|         Philippines|      -118.502|
+|            Malaysia|      100.0029|
+|           Singapore|       -0.0275|
+|Kingdom of the Ne...|       -0.0001|
+|              Turkey|       -0.0039|
+|                Iraq|       28.7299|
+|             Germany|       -0.0001|
+|         Afghanistan|       45.3489|
+|            Cambodia|       105.054|
+|              Jordan|        -0.029|
+|              Rwanda|       72.6946|
+|              France|        -0.001|
+|              Greece|       -0.0228|
+|           Sri Lanka|      100.0121|
+|              Taiwan|     -101.6506|
+|             Algeria|        -0.002|
 +--------------------+--------------+
 only showing top 20 rows
 
 
 c. Get the max speed ever seen for the last 4 hours
-df.filter(allAfterPredicate(4)).agg(max("velocity")).show
+df.filter(allAfterPredicate(4) && (col("velocity") !== "None")).withColumn("velocity", col("velocity") cast "Double").agg(max("velocity")).show
 +-------------+
 |max(velocity)|
 +-------------+
-|         None|
+|       597.78|
 +-------------+
 
-spark.sql(s"select max(velocity) from my_df_table where time > ${allAfter(4)}")
-+-------------+
-|max(velocity)|
-+-------------+
-|         None|
-+-------------+
+spark.sql(s"select max(cast(velocity as double)) from opensky_data where time > ${allAfter(4)} and velocity != 'None'").show
++-----------------------------+
+|max(CAST(velocity AS DOUBLE))|
++-----------------------------+
+|                       597.78|
++-----------------------------+
 
 
 d. Get top 10 airplanes with max average speed for the last 4 hours (round the result)
@@ -554,48 +554,48 @@ df.filter(allAfterPredicate(4)).groupBy("icao24").agg(avg("velocity")).sort(col(
 +------+------------------+
 |icao24|     avg(velocity)|
 +------+------------------+
-|a6b330| 829.5400000000004|
-|324706| 698.2700000000001|
-|338576| 663.7928571428572|
-|340517| 541.4189473684211|
-|42440d|382.67168316831686|
-|491311|369.68458823529414|
-|c07ee0|           358.165|
-|89610d|317.26750000000004|
-|ab4ae9| 307.0107777777778|
-|789210| 302.8693023255814|
+|15069c|353.50666666666666|
+|8960fa|308.66755555555557|
+|4bb14b| 305.0566666666666|
+|4d0114|303.73704968944105|
+|78022d| 300.2572602739726|
+|a0817c|299.38212765957445|
+|4acb0d|            299.24|
+|c0583a|        298.473125|
+|896193| 297.8937142857143|
+|4ba952|297.57098039215686|
 +------+------------------+
 
-spark.sql(s"select icao24, avg(velocity) as velocity from my_df_table where time > ${allAfter(4)} group by icao24").sort(col("velocity").desc).limit(10).show
+spark.sql(s"select icao24, avg(velocity) as velocity from opensky_data where time > ${allAfter(4)} group by icao24").sort(col("velocity").desc).limit(10).show
 +------+------------------+
 |icao24|          velocity|
 +------+------------------+
-|a6b330| 829.5400000000004|
-|324706| 698.2700000000001|
-|338576| 663.7928571428572|
-|340517| 541.4189473684211|
-|42440d|382.67168316831686|
-|491311|369.68458823529414|
-|c07ee0|           358.165|
-|89610d|317.26750000000004|
-|ab4ae9| 307.0107777777778|
-|789210| 302.8693023255814|
+|15069c|353.50666666666666|
+|8960fa|308.66755555555557|
+|4bb14b| 305.0566666666666|
+|4d0114|303.73704968944105|
+|78022d| 300.2572602739726|
+|a0817c|299.38212765957445|
+|4acb0d|            299.24|
+|c0583a|        298.473125|
+|896193| 297.8937142857143|
+|4ba952|297.57098039215686|
 +------+------------------+
 
-spark.sql(s"select icao24, avg(velocity) as velocity from my_df_table where time > ${allAfter(4)} group by icao24 sort by velocity desc limit 10").show
+spark.sql(s"select icao24, avg(velocity) as velocity from opensky_data where time > ${allAfter(4)} group by icao24 sort by velocity desc limit 10").show
 +------+------------------+
 |icao24|          velocity|
 +------+------------------+
-|8964ff|263.03142548596117|
-|06a074|249.01319148936176|
-|51409e|248.07414772727273|
-|a491b2|           244.411|
-|478d42|244.13510460251058|
-|a2f200| 242.8633226837061|
-|45c86b| 236.6772049689441|
-|896356|233.00999999999993|
-|a61b4e| 231.6092920353982|
-|885967|230.82136170212772|
+|406d78|286.64466666666675|
+|4d012f|  285.416091954023|
+|424789|267.12869158878505|
+|4bb186| 262.4423170731707|
+|3c4aaf|260.69195402298857|
+|06a109|255.97999999999985|
+|a61b4e|         254.84235|
+|ad60b7|237.14535055350552|
+|346181|235.48259067357512|
+|345644|233.99281385281387|
 +------+------------------+
 
 
@@ -604,53 +604,53 @@ df.filter(allAfterPredicate(4) && col("origin_country") === "Germany" && col("on
 +------+
 |icao24|
 +------+
+|3e0a46|
+|3defea|
 |3c66b8|
-|3d3ad8|
-|3c66b7|
+|3f9738|
 |3c662c|
-|3c6463|
-|3da4a0|
+|3c0c9e|
 |3c5eea|
-|3c56a8|
+|3d5af0|
 |3c56ee|
-|3c0ca1|
-|3c4d62|
-|3c49e8|
 |3c65cd|
-|3c427e|
+|3c496a|
+|3c70c6|
+|3c4d62|
 |3c658e|
-|3c5ee8|
-|3ce3b3|
-|3c656e|
+|3c4891|
 |3c66b5|
-|3e9fd2|
+|3e1c9e|
+|3c65a1|
+|3c4346|
+|3c6dd2|
 +------+
 only showing top 20 rows
 
-spark.sql(s"select distinct icao24 from my_df_table where time > ${allAfter(4)} and origin_country = 'Germany' and on_ground = 'True'").show
+spark.sql(s"select distinct icao24 from opensky_data where time > ${allAfter(4)} and origin_country = 'Germany' and on_ground = 'True'").show
 +------+
 |icao24|
 +------+
+|3e0a46|
+|3defea|
 |3c66b8|
-|3d3ad8|
-|3c66b7|
+|3f9738|
 |3c662c|
-|3c6463|
-|3da4a0|
+|3c0c9e|
 |3c5eea|
-|3c56a8|
+|3d5af0|
 |3c56ee|
-|3c0ca1|
-|3c4d62|
-|3c49e8|
 |3c65cd|
-|3c427e|
+|3c496a|
+|3c70c6|
+|3c4d62|
 |3c658e|
-|3c5ee8|
-|3ce3b3|
-|3c656e|
+|3c4891|
 |3c66b5|
-|3e9fd2|
+|3e1c9e|
+|3c65a1|
+|3c4346|
+|3c6dd2|
 +------+
 only showing top 20 rows
 
@@ -660,107 +660,122 @@ df.filter(allAfterPredicate(24) && col("on_ground") === "False").groupBy("origin
 +--------------+-----+
 |origin_country|count|
 +--------------+-----+
-| United States| 9295|
-|         Italy| 4124|
-|         China| 1750|
-|United Kingdom| 1504|
-|       Germany|  873|
-|       Ireland|  722|
-|        Canada|  566|
-|         Spain|  553|
-|         India|  458|
-|        Turkey|  457|
+|         Italy| 1994|
+| United States| 1384|
+|United Kingdom| 1076|
+|         China|  896|
+|       Ireland|  651|
+|       Germany|  604|
+|     Australia|  483|
+|         India|  377|
+|        Turkey|  376|
+|         Spain|  360|
 +--------------+-----+
 
-spark.sql(s"select origin_country, count(*) as cnt from (select icao24, origin_country from my_df_table where time > ${allAfter(240)} and on_ground = 'False' group by icao24, origin_country) group by origin_country sort by cnt desc limit 10").show -- It is seems not working, don't understand why..
+spark.sql(s"select origin_country, count(*) as cnt from (select icao24, origin_country from opensky_data where time > ${allAfter(240)} and on_ground = 'False' group by icao24, origin_country) group by origin_country sort by cnt desc limit 10").show -- It is seems not working, don't understand why..
 +--------------------+---+
 |      origin_country|cnt|
 +--------------------+---+
-|       Côte d'Ivoire|  1|
-|               Yemen|  1|
-|Islamic Republic ...| 16|
-|             Senegal|  3|
-|              Sweden| 76|
-|   Republic of Korea|287|
-|         Philippines|106|
-|            Malaysia|206|
-|           Singapore|138|
-|Kingdom of the Ne...|318|
+|Islamic Republic ...| 10|
+|             Senegal|  1|
+|              Sweden| 57|
+|   Republic of Korea|210|
+|         Philippines| 87|
+|            Malaysia|159|
+|           Singapore| 86|
+|Kingdom of the Ne...|228|
+|              Turkey|376|
+|                Iraq|  7|
 +--------------------+---+
 
 But it is works correct: 
-spark.sql(s"select origin_country, count(*) as cnt from (select icao24, origin_country from my_df_table where time > ${allAfter(240)} and on_ground = 'False' group by icao24, origin_country) group by origin_country").sort(col("cnt").desc).limit(10).show
+spark.sql(s"select origin_country, count(*) as cnt from (select icao24, origin_country from opensky_data where time > ${allAfter(240)} and on_ground = 'False' group by icao24, origin_country) group by origin_country").sort(col("cnt").desc).limit(10).show
 +--------------+----+
 |origin_country| cnt|
 +--------------+----+
-| United States|9295|
-|         Italy|4124|
-|         China|1750|
-|United Kingdom|1504|
-|       Germany| 873|
-|       Ireland| 722|
-|        Canada| 566|
-|         Spain| 553|
-|         India| 458|
-|        Turkey| 457|
+|         Italy|1994|
+| United States|1384|
+|United Kingdom|1076|
+|         China| 896|
+|       Ireland| 651|
+|       Germany| 604|
+|     Australia| 483|
+|         India| 377|
+|        Turkey| 376|
+|         Spain| 360|
 +--------------+----+
 
 
 g. Show top 10 longest (by time) completed flights for the last day
-???
+df.filter(col("on_ground") === "True").groupBy("icao24").agg(sort_array(collect_list(col("time")))).map(row => (row.getString(0), maxInterval(row.getList(1), 0, 0))).sort(col("_2").desc).limit(10).show
++------+----+
+|    _1|  _2|
++------+----+
+|300564|4640|
+|800bd4|4620|
+|49d3fa|4580|
+|894f72|4480|
+|4bccba|4460|
+|4ca6a5|4460|
+|4780b9|4440|
+|4b19f5|4440|
+|4caa7c|4420|
+|3c496e|4410|
++------+----+
+
 
 h. Get the average geo_altitude value for each origin_country(round the result to 3 decimal places and rename column)
 df.groupBy("origin_country").agg(round(avg("geo_altitude"), 3)).withColumnRenamed("round(avg(geo_altitude), 3)", "avg_geo_altitude").show
 +--------------------+----------------+
 |      origin_country|avg_geo_altitude|
 +--------------------+----------------+
-|       Côte d'Ivoire|        7462.007|
-|               Yemen|        13094.32|
-|Islamic Republic ...|          8688.5|
-|             Senegal|        6472.107|
-|              Sweden|        6504.659|
-|   Republic of Korea|        8743.657|
-|         Philippines|        6181.924|
-|           Singapore|        9485.578|
-|            Malaysia|        6290.923|
-|Kingdom of the Ne...|        8124.982|
-|                Fiji|        8730.169|
-|              Turkey|        9307.767|
-|                Iraq|        8293.599|
-|             Germany|        7448.554|
-|         Afghanistan|        9986.408|
-|            Cambodia|        7221.682|
-|              Jordan|       10158.113|
-|              Rwanda|          5559.2|
-|            Maldives|        6764.339|
-|              France|        8455.841|
+|Islamic Republic ...|        5845.223|
+|             Senegal|        3084.295|
+|              Sweden|        6832.226|
+|   Republic of Korea|        7159.268|
+|         Philippines|        6016.424|
+|           Singapore|        8605.011|
+|            Malaysia|         6566.55|
+|Kingdom of the Ne...|        8093.715|
+|              Turkey|        8449.423|
+|                Iraq|        6977.009|
+|             Germany|        7119.539|
+|            Cambodia|        7524.763|
+|         Afghanistan|          7734.3|
+|              Jordan|       10008.485|
+|              Rwanda|        8970.058|
+|              France|        8064.527|
+|              Greece|        8285.014|
+|           Sri Lanka|       10525.431|
+|              Taiwan|        6357.235|
+|             Algeria|        8302.725|
 +--------------------+----------------+
 only showing top 20 rows
 
-spark.sql(s"select origin_country, round(avg(geo_altitude), 3) as avg_geo_altitude from my_df_table group by origin_country").show
+spark.sql(s"select origin_country, round(avg(geo_altitude), 3) as avg_geo_altitude from opensky_data group by origin_country").show
 +--------------------+----------------+
 |      origin_country|avg_geo_altitude|
 +--------------------+----------------+
-|       Côte d'Ivoire|        7462.007|
-|               Yemen|        13094.32|
-|Islamic Republic ...|          8688.5|
-|             Senegal|        6472.107|
-|              Sweden|        6504.659|
-|   Republic of Korea|        8743.657|
-|         Philippines|        6181.924|
-|           Singapore|        9485.578|
-|            Malaysia|        6290.923|
-|Kingdom of the Ne...|        8124.982|
-|                Fiji|        8730.169|
-|              Turkey|        9307.767|
-|                Iraq|        8293.599|
-|             Germany|        7448.554|
-|         Afghanistan|        9986.408|
-|            Cambodia|        7221.682|
-|              Jordan|       10158.113|
-|              Rwanda|          5559.2|
-|            Maldives|        6764.339|
-|              France|        8455.841|
+|Islamic Republic ...|        5845.223|
+|             Senegal|        3084.295|
+|              Sweden|        6832.226|
+|   Republic of Korea|        7159.268|
+|         Philippines|        6016.424|
+|           Singapore|        8605.011|
+|            Malaysia|         6566.55|
+|Kingdom of the Ne...|        8093.715|
+|              Turkey|        8449.423|
+|                Iraq|        6977.009|
+|             Germany|        7119.539|
+|            Cambodia|        7524.763|
+|         Afghanistan|          7734.3|
+|              Jordan|       10008.485|
+|              Rwanda|        8970.058|
+|              France|        8064.527|
+|              Greece|        8285.014|
+|           Sri Lanka|       10525.431|
+|              Taiwan|        6357.235|
+|             Algeria|        8302.725|
 +--------------------+----------------+
 only showing top 20 rows
 ```
