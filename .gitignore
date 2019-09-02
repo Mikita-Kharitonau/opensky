@@ -3,5 +3,5 @@ __pycache__/
 venv
 *.log
 metastore_db
-spark-queries/project/
-spark-queries/target/
+project
+target
