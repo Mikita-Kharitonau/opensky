@@ -1,4 +1,7 @@
 .idea
 __pycache__/
-spark-queries/project/
-spark-queries/target/
+venv
+*.log
+metastore_db
+project
+target
