@@ -1,6 +1,8 @@
 import org.apache.spark.sql.{Column, SparkSession}
 import org.apache.spark.sql.functions.{avg, col, max, min, round}
 
+import scala.annotation.tailrec
+
 object SparkQueries {
   def main(args: Array[String]) {
     val spark = SparkSession.builder.appName("Spark Queries").getOrCreate()
@@ -80,5 +82,19 @@ object SparkQueries {
 
   def allAfter(hours: Double): Column = {
     col("time") > System.currentTimeMillis / 1000 - hours * 3600
+  }
+
+  @tailrec
+  final def maxInterval(times: java.util.List[String], index: Int, current: Long): Long = {
+    if(index == times.size - 1) {
+      return current
+    }
+    val actual = times.get(index + 1).toLong - times.get(index).toLong
+    if(actual > current) {
+      maxInterval(times, index + 1, actual)
+    }
+    else {
+      maxInterval(times, index + 1, current)
+    }
   }
 }
