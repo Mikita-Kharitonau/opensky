@@ -1,9 +1,9 @@
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
-import org.apache.log4j.{ Level, Logger }
+import org.apache.log4j.{Level, Logger}
 
 import scala.math.random
-import org.apache.spark.util.AccumulatorV2
+import org.apache.spark.util.{AccumulatorV2, LongAccumulator}
 
 // Set off the vebose log messages
 Logger.getLogger("org").setLevel(Level.OFF)
@@ -24,7 +24,7 @@ lazy val sc = spark.sparkContext
 // sc: sparkContext object (Spark 1.x compatible)
 
 class DismissalAccumulator extends AccumulatorV2[Double, Double] {
-  private val PERIOD: Int = 365 * 5
+  private val PERIOD: Int = 10 * 5
 
   private var currentDismissal: Double = 0
   private var iterations: Int = 0
@@ -43,6 +43,7 @@ class DismissalAccumulator extends AccumulatorV2[Double, Double] {
     }
 
     if (newValue > currentEmployerSkill) {
+      println(newValue, currentEmployerSkill, calledNum)
       currentEmployerSkill = newValue
       dismissalAccum = dismissalAccum + 1
     }
@@ -65,7 +66,13 @@ class DismissalAccumulator extends AccumulatorV2[Double, Double] {
   def reset: Unit = this.dismissalAccum = 0
 }
 
-val collectionSize: Long = 1000000L
+val collectionSize: Long = 100L
 val numPartitions: Int = 8
 
-sc.parallelize(1 to collectionSize, numPartitions).foreach(i => myCustomAccum.add(random))
+val dismissalAccumulator: AccumulatorV2[Double, Double] = new DismissalAccumulator
+
+spark.sparkContext.register(dismissalAccumulator)
+
+sc.parallelize(1L to collectionSize, 1).foreach(i => dismissalAccumulator.add(random))
+
+dismissalAccumulator.value
