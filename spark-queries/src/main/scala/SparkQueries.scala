@@ -3,8 +3,6 @@ import org.apache.spark.sql.functions.{avg, col, max, min, round, sort_array, co
 
 import scala.annotation.tailrec
 
-import scala.annotation.tailrec
-
 object SparkQueries {
   def main(args: Array[String]) {
     val spark = SparkSession.builder.appName("Spark Queries").getOrCreate()
